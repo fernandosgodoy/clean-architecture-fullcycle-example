@@ -1,3 +1,4 @@
+import ParkedCar from "../entity/ParkedCar";
 import ParkingLotRepository from "../repository/ParkingLotRepository";
 
 export default class EnterParkingLot {
@@ -7,8 +8,13 @@ export default class EnterParkingLot {
         this.parkingLotRepository = parkingLotRepository;
     }
 
-    async execute(code: string) {
+    async execute(code: string, plate: string, date: Date) {
         const parkingLot =  this.parkingLotRepository.getParkingLot(code);
+        const parkedCar = new ParkedCar(code, plate, date);
+        if (!(await parkingLot).isOpen(parkedCar.date))
+            throw new Error("The parking lot is closed");
+
+        await this.parkingLotRepository.saveParkedCar(parkedCar.code, parkedCar.plate, parkedCar.date);
         return parkingLot;
     }
 }
