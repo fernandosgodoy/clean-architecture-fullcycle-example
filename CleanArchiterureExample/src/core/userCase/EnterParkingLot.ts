@@ -1,12 +1,14 @@
-import ParkingLot from "../entity/ParkingLot";
+import ParkingLotRepository from "../repository/ParkingLotRepository";
 
 export default class EnterParkingLot {
-    constructor() {
+    parkingLotRepository: ParkingLotRepository;
 
+    constructor(parkingLotRepository: ParkingLotRepository) {
+        this.parkingLotRepository = parkingLotRepository;
     }
 
-    execute() {
-        const parkingLot = new ParkingLot("shopping", 200, 10, 22);
+    async execute(code: string) {
+        const parkingLot =  this.parkingLotRepository.getParkingLot(code);
         return parkingLot;
     }
 }
