@@ -18,8 +18,8 @@ export default class ParkingLot {
         return (hour >= this.openHour && hour <= this.closeHour)
     }
 
-    getOccupiedSpaces(code: string) {
-
+    isFull() {
+        return this.capacity === this.occupiedSpaces;
     }
 
 }

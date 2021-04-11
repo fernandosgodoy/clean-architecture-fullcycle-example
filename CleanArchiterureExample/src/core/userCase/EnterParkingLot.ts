@@ -9,10 +9,14 @@ export default class EnterParkingLot {
     }
 
     async execute(code: string, plate: string, date: Date) {
-        const parkingLot =  this.parkingLotRepository.getParkingLot(code);
+        const parkingLot = await this.parkingLotRepository.getParkingLot(code);
         const parkedCar = new ParkedCar(code, plate, date);
-        if (!(await parkingLot).isOpen(parkedCar.date))
+
+        if (!parkingLot.isOpen(parkedCar.date))
             throw new Error("The parking lot is closed");
+
+        if (parkingLot.isFull())
+            throw new Error("Parking Lot is full");
 
         await this.parkingLotRepository.saveParkedCar(parkedCar.code, parkedCar.plate, parkedCar.date);
         return parkingLot;
